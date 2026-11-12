@@ -14,6 +14,12 @@ export default async function handler(req, res) {
   const MNOTIFY_SENDER  = process.env.MNOTIFY_SENDER;
   const ISRAEL_PHONE    = process.env.ISRAEL_PHONE;
 
+  // Guard: make sure env vars are set
+  if (!MNOTIFY_API_KEY || !MNOTIFY_SENDER || !ISRAEL_PHONE) {
+    console.error("Missing env vars:", { MNOTIFY_API_KEY: !!MNOTIFY_API_KEY, MNOTIFY_SENDER: !!MNOTIFY_SENDER, ISRAEL_PHONE: !!ISRAEL_PHONE });
+    return res.status(500).json({ success: false, error: "Server misconfiguration: missing env vars" });
+  }
+
   const message = `Hey Israel! 🍦 Ceydes said YES! She's free on ${day} at ${time}. It's a date! ♡`;
 
   const url = `https://apps.mnotify.net/smsapi?key=${MNOTIFY_API_KEY}` +
@@ -21,11 +27,18 @@ export default async function handler(req, res) {
               `&msg=${encodeURIComponent(message)}` +
               `&sender_id=${encodeURIComponent(MNOTIFY_SENDER)}`;
 
+  console.log("Sending SMS to:", ISRAEL_PHONE, "| Message:", message);
+
   try {
     const response = await fetch(url);
     const text = await response.text();
-    return res.status(200).json({ success: true, raw: text });
+    console.log("mNotify response:", text);
+
+    // mNotify returns "1000" or similar code on success
+    const success = response.ok && text.includes("1000");
+    return res.status(200).json({ success, raw: text });
   } catch (err) {
+    console.error("SMS fetch error:", err.message);
     return res.status(500).json({ success: false, error: err.message });
   }
 }
