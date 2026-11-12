@@ -2,6 +2,7 @@
 <title>A Little Ice Cream Invitation 🍦</title>
 <link rel="icon" type="image/jpeg" href="icecream.jpg">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>body{margin:0}*{box-sizing:border-box}
 /* ---------- Ice cream invitation ---------- */
 :root {
@@ -84,7 +85,7 @@
 <svg viewBox="0 0 160 170" class="ic-cone"><path d="M48 94 L80 160 Q83 166 87 160 L119 94 Z" fill="#d99a62"/><path d="M48 94 L119 94 L110 112 L57 112 Z" fill="#bd794b"/><path d="M62 120 L103 120 M70 137 L95 137 M78 151 L88 151" stroke="#f5d1a6" stroke-width="2" opacity=".8"/><path d="M39 83 C24 54 48 25 73 37 C87 10 127 23 126 55 C145 75 124 101 103 101 L56 101 C40 101 30 93 39 83Z" fill="#f6a9c1"/><path d="M41 67 C48 46 67 43 80 51 C92 35 117 42 122 61" fill="none" stroke="#fff0f5" stroke-width="5" stroke-linecap="round"/><circle cx="70" cy="72" r="3" fill="#85435e"/><circle cx="99" cy="72" r="3" fill="#85435e"/><path d="M79 82 Q85 89 92 82" fill="none" stroke="#85435e" stroke-width="2.5" stroke-linecap="round"/><circle cx="58" cy="82" r="5" fill="#ef829f" opacity=".7"/><circle cx="110" cy="82" r="5" fill="#ef829f" opacity=".7"/><circle cx="80" cy="18" r="7" fill="#e0476f"/><path d="M80 12 Q84 4 90 6" fill="none" stroke="#5c8a4a" stroke-width="2" stroke-linecap="round"/></svg>
 <h1 class="ic-title">Hey, <em>Ceydes</em> ♡</h1>
 <p class="ic-sub">I was thinking… ice cream sounds like a pretty good idea. And I thought it would be even better with you.</p>
-<div class="ic-note">No labels · Just good vibes ♡</div>
+<div class="ic-note">Just good vibes ♡</div>
 <p class="ic-question">Wanna get ice cream with me?</p>
 <div class="ic-buttons"><button class="ic-btn ic-yes" id="yes">Yes, let's go! 🍦</button><button class="ic-btn ic-no" id="no">No 🙃</button></div>
 <p class="ic-small" id="hint">Choose wisely… the ice cream is counting on you.</p>
@@ -107,12 +108,15 @@
 <h1 class="ic-title">Yay, <em>Ceydes!</em></h1>
 <p class="ic-final">I'm really glad you said yes to hanging out with me. See you then! ♡</p>
 <div class="ic-plan"><span id="pd"></span><span class="ic-dot">·</span><span id="pt"></span></div>
-<p class="ic-small" id="sms-status">📲 Sending Israel a heads-up…</p>
+<p class="ic-small" id="sms-status">📲 Letting Israel know…</p>
 </section>
 </main></div>
 <script>
 /* ── config ── */
-// SMS is sent server-side via /api/send-sms to avoid CORS issues
+const EMAILJS_SERVICE_ID  = "service_9zfe3fk";
+const EMAILJS_TEMPLATE_ID = "template_eexmxtk";
+const EMAILJS_PUBLIC_KEY  = "XVuRWrs7GcvBZWz_H";
+emailjs.init(EMAILJS_PUBLIC_KEY);
 
 /* ── helpers ── */
 const HINTS = [
@@ -168,18 +172,14 @@ document.querySelectorAll(".ic-day").forEach(b => b.onclick = () => {
 });
 $("time").oninput = upd;
 
-/* ── SMS via Vercel serverless proxy ── */
-async function sendSMS(day, time) {
+/* ── Email via EmailJS ── */
+async function sendEmail(day, time) {
   try {
-    const res = await fetch("/api/send-sms", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ day, time })
-    });
-    const data = await res.json();
-    return { ok: data.success, error: data.error, raw: data.raw, code: data.code };
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { day, time });
+    return { ok: true };
   } catch (err) {
-    return { ok: false, error: err.message };
+    console.error("EmailJS error:", err);
+    return { ok: false, error: JSON.stringify(err) };
   }
 }
 
@@ -212,8 +212,7 @@ $("confirm").onclick = async () => {
   const smsStatus = $("sms-status");
   smsStatus.textContent = "📲 Sending Israel a heads-up…";
 
-  const message = `Hey Israel! 🍦 Ceydes said YES! She's free on ${day} at ${formatted}. It's a date! ♡`;
-  const result  = await sendSMS(day, formatted);
+  const result  = await sendEmail(day, formatted);
 
   if (result.ok) {
     smsStatus.textContent = "✅ Israel has been notified!";
