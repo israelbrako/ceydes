@@ -1,0 +1,225 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Ice Cream Invitation 🍦</title>
+<link rel="icon" type="image/jpeg" href="icecream.jpg">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+<style>body{margin:0}*{box-sizing:border-box}
+/* ---------- Ice cream invitation ---------- */
+:root {
+  --ic-berry: oklch(0.42 0.1 355);
+  --ic-rose: oklch(0.68 0.13 355);
+  --ic-deep: oklch(0.52 0.14 355);
+  --ic-muted: oklch(0.58 0.06 355);
+  --ic-soft: oklch(0.96 0.025 355);
+  --ic-cream: oklch(0.99 0.01 60);
+  --ic-green: oklch(0.62 0.15 155);
+  --ic-grad: linear-gradient(135deg, oklch(0.72 0.13 355), oklch(0.52 0.14 355));
+  --ic-shadow: 0 30px 80px -20px oklch(0.45 0.12 355 / 0.35);
+  --font-ic-serif: "Playfair Display", serif;
+  --font-ic-sans: "DM Sans", sans-serif;
+}
+.ic-bg {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 24px 16px; overflow: hidden; position: relative;
+  font-family: var(--font-ic-sans); color: var(--ic-berry);
+  background:
+    radial-gradient(circle at 20% 10%, oklch(1 0 0 / 0.7), transparent 40%),
+    linear-gradient(135deg, oklch(0.95 0.03 355), oklch(0.87 0.07 355) 55%, oklch(0.93 0.04 50));
+}
+.ic-blob { position: fixed; border-radius: 50%; filter: blur(60px); opacity: .55; pointer-events: none; animation: ic-drift 14s ease-in-out infinite; }
+.ic-blob-1 { width: 380px; height: 380px; background: oklch(0.85 0.1 20); top: -120px; left: -100px; }
+.ic-blob-2 { width: 420px; height: 420px; background: oklch(0.9 0.07 80); bottom: -160px; right: -120px; animation-delay: -6s; }
+@keyframes ic-drift { 50% { transform: translate(40px, 30px) scale(1.1); } }
+.ic-float { position: fixed; font-size: 26px; opacity: .5; pointer-events: none; animation: ic-floaty 5s ease-in-out infinite; color: oklch(1 0 0); }
+@keyframes ic-floaty { 0%,100% { transform: translateY(0) rotate(-8deg); } 50% { transform: translateY(-18px) rotate(8deg); } }
+.ic-card {
+  width: 100%; max-width: 440px; position: relative; z-index: 1; padding: 40px 28px; text-align: center;
+  background: oklch(1 0 0 / 0.72); border: 1px solid oklch(1 0 0 / 0.95); border-radius: 32px;
+  box-shadow: var(--ic-shadow), inset 0 1px 0 oklch(1 0 0); backdrop-filter: blur(18px);
+}
+.ic-page { animation: ic-appear .6s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes ic-appear { from { opacity: 0; transform: translateY(20px) scale(.97); } }
+.ic-eyebrow { text-transform: uppercase; letter-spacing: 3px; font-size: 10px; font-weight: 800; color: var(--ic-rose); }
+.ic-cone { width: 150px; height: 160px; margin: 12px auto 10px; animation: ic-bob 3s ease-in-out infinite; filter: drop-shadow(0 14px 18px oklch(0.5 0.12 355 / 0.25)); }
+@keyframes ic-bob { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-9px) rotate(3deg); } }
+.ic-title { font-family: var(--font-ic-serif); font-size: 40px; line-height: 1.12; margin: 8px 0 12px; font-weight: 600; }
+.ic-title em { color: var(--ic-rose); font-style: italic; }
+.ic-sub { color: var(--ic-muted); font-size: 14px; line-height: 1.8; margin: 0 auto 20px; max-width: 310px; }
+.ic-note { display: inline-block; background: var(--ic-soft); color: var(--ic-deep); border: 1px dashed oklch(0.8 0.08 355); border-radius: 999px; padding: 8px 16px; font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 22px; }
+.ic-question { font-family: var(--font-ic-serif); font-style: italic; font-size: 21px; margin: 0 0 22px; }
+.ic-buttons { display: flex; justify-content: center; gap: 14px; min-height: 64px; align-items: center; }
+.ic-btn { border: 0; border-radius: 999px; padding: 14px 26px; font: inherit; font-weight: 800; font-size: 13px; cursor: pointer; transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .2s, opacity .2s; }
+.ic-yes { color: var(--ic-cream); background: var(--ic-grad); box-shadow: 0 10px 24px -6px oklch(0.52 0.14 355 / 0.5); position: relative; z-index: 2; }
+.ic-yes:hover:not(:disabled) { box-shadow: 0 16px 30px -6px oklch(0.52 0.14 355 / 0.6); filter: brightness(1.05); }
+.ic-yes:disabled { opacity: .45; cursor: not-allowed; }
+.ic-no { color: var(--ic-muted); background: var(--ic-soft); }
+.ic-no-free { position: fixed; z-index: 50; transition: left .25s cubic-bezier(.34,1.56,.64,1), top .25s cubic-bezier(.34,1.56,.64,1); box-shadow: 0 8px 20px -8px oklch(0.4 0.1 355 / .3); }
+.ic-small { font-size: 12px; color: var(--ic-muted); margin-top: 26px; min-height: 18px; }
+.ic-celebrate { font-size: 54px; margin: 10px; animation: ic-bob 2s infinite; }
+.ic-label { display: block; text-align: left; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; margin: 18px 0 10px; color: var(--ic-deep); }
+.ic-days { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ic-day { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 18px 10px; border-radius: 20px; border: 2px solid oklch(0.92 0.03 355); background: oklch(1 0 0 / .8); cursor: pointer; font: inherit; color: var(--ic-berry); transition: all .25s cubic-bezier(.34,1.56,.64,1); }
+.ic-day:hover { transform: translateY(-3px); border-color: var(--ic-rose); }
+.ic-day.is-active { border-color: var(--ic-deep); background: var(--ic-soft); transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 24px -10px oklch(0.52 0.14 355 / .5); }
+.ic-day-emoji { font-size: 26px; }
+.ic-day-name { font-family: var(--font-ic-serif); font-size: 20px; font-weight: 600; }
+.ic-day-note { font-size: 11px; color: var(--ic-muted); }
+.ic-input { width: 100%; border: 2px solid oklch(0.92 0.03 355); background: oklch(1 0 0 / .8); border-radius: 16px; padding: 14px; font: inherit; color: var(--ic-berry); outline: none; margin-bottom: 22px; }
+.ic-input:focus { border-color: var(--ic-rose); box-shadow: 0 0 0 4px var(--ic-soft); }
+.ic-full { width: 100%; }
+.ic-back { background: transparent; border: 0; color: var(--ic-muted); margin-top: 14px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+.ic-final { font-family: var(--font-ic-serif); font-size: 23px; line-height: 1.5; margin: 14px 0; }
+.ic-plan { display: inline-flex; gap: 10px; align-items: center; padding: 12px 22px; border-radius: 999px; background: var(--ic-grad); color: var(--ic-cream); font-weight: 800; margin-bottom: 18px; }
+.ic-dot { opacity: .7; }
+.ic-share { background: var(--ic-green); color: var(--ic-cream); margin-top: 6px; }
+.ic-confetti { position: fixed; top: -20px; z-index: 60; pointer-events: none; animation: ic-fall linear forwards; }
+@keyframes ic-fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+@media (max-width: 380px) { .ic-card { padding: 32px 20px; } .ic-title { font-size: 34px; } }
+.hide{display:none!important}</style></head><body>
+<div class="ic-bg"><div class="ic-blob ic-blob-1"></div><div class="ic-blob ic-blob-2"></div>
+<span class="ic-float" style="top:12%;left:9%">♡</span><span class="ic-float" style="top:20%;right:10%;animation-delay:1s">✦</span>
+<span class="ic-float" style="bottom:16%;left:12%;animation-delay:2s">🍓</span><span class="ic-float" style="bottom:12%;right:12%;animation-delay:.5s">♡</span>
+<main class="ic-card">
+<section class="ic-page" id="welcome">
+<div class="ic-eyebrow">A tiny invitation · Just because</div>
+<svg viewBox="0 0 160 170" class="ic-cone"><path d="M48 94 L80 160 Q83 166 87 160 L119 94 Z" fill="#d99a62"/><path d="M48 94 L119 94 L110 112 L57 112 Z" fill="#bd794b"/><path d="M62 120 L103 120 M70 137 L95 137 M78 151 L88 151" stroke="#f5d1a6" stroke-width="2" opacity=".8"/><path d="M39 83 C24 54 48 25 73 37 C87 10 127 23 126 55 C145 75 124 101 103 101 L56 101 C40 101 30 93 39 83Z" fill="#f6a9c1"/><path d="M41 67 C48 46 67 43 80 51 C92 35 117 42 122 61" fill="none" stroke="#fff0f5" stroke-width="5" stroke-linecap="round"/><circle cx="70" cy="72" r="3" fill="#85435e"/><circle cx="99" cy="72" r="3" fill="#85435e"/><path d="M79 82 Q85 89 92 82" fill="none" stroke="#85435e" stroke-width="2.5" stroke-linecap="round"/><circle cx="58" cy="82" r="5" fill="#ef829f" opacity=".7"/><circle cx="110" cy="82" r="5" fill="#ef829f" opacity=".7"/><circle cx="80" cy="18" r="7" fill="#e0476f"/><path d="M80 12 Q84 4 90 6" fill="none" stroke="#5c8a4a" stroke-width="2" stroke-linecap="round"/></svg>
+<h1 class="ic-title">Hey, <em>Ceydes</em> ♡</h1>
+<p class="ic-sub">I was thinking… ice cream sounds like a pretty good idea. And I thought it would be even better with you.</p>
+<div class="ic-note">No labels · Just good vibes ♡</div>
+<p class="ic-question">Wanna get ice cream with me?</p>
+<div class="ic-buttons"><button class="ic-btn ic-yes" id="yes">Yes, let's go! 🍦</button><button class="ic-btn ic-no" id="no">No 🙃</button></div>
+<p class="ic-small" id="hint">Choose wisely… the ice cream is counting on you.</p>
+</section>
+<section class="ic-page hide" id="schedule">
+<div class="ic-eyebrow">Excellent choice ✨</div><div class="ic-celebrate">🍨</div>
+<h1 class="ic-title">Now we're <em>talking!</em></h1>
+<p class="ic-sub">Pick the day that suits you best — I'll handle the rest.</p>
+<div class="ic-label">Which day works?</div>
+<div class="ic-days">
+<button class="ic-day" data-day="Friday"><span class="ic-day-emoji">🌙</span><span class="ic-day-name">Friday</span><span class="ic-day-note">End the week sweet</span></button>
+<button class="ic-day" data-day="Saturday"><span class="ic-day-emoji">☀️</span><span class="ic-day-name">Saturday</span><span class="ic-day-note">Lazy weekend scoops</span></button>
+</div>
+<label class="ic-label" for="time">What time works?</label><input id="time" type="time" class="ic-input">
+<button class="ic-btn ic-yes ic-full" id="confirm" disabled>Pick a day &amp; time ♡</button>
+<button class="ic-back" id="back">← Go back</button>
+</section>
+<section class="ic-page hide" id="finish">
+<div class="ic-eyebrow">It's a plan ✨</div><div class="ic-celebrate">🍦💗</div>
+<h1 class="ic-title">Yay, <em>Ceydes!</em></h1>
+<p class="ic-final">I'm really glad you said yes to hanging out with me. See you then! ♡</p>
+<div class="ic-plan"><span id="pd"></span><span class="ic-dot">·</span><span id="pt"></span></div>
+<p class="ic-small" id="sms-status">📲 Sending Israel a heads-up…</p>
+</section>
+</main></div>
+<script>
+/* ── config ── */
+// SMS is sent server-side via /api/send-sms to avoid CORS issues
+
+/* ── helpers ── */
+const HINTS = [
+  "Choose wisely… the ice cream is counting on you.",
+  "Are you sure? 🥺",
+  "But… ice cream though? 🍦",
+  "I'll even let you choose the flavour! 😭",
+  "The No button seems a little shy today…",
+  "Okay, Yes is looking really tempting now 👀",
+  "Resistance is futile ♡"
+];
+let tries = 0, day = "";
+const $ = id => document.getElementById(id);
+
+const show = id => {
+  ["welcome","schedule","finish"].forEach(p => $(p).classList.toggle("hide", p !== id));
+  $("no").classList.toggle("hide", id !== "welcome");
+};
+
+/* ── No-button dodge ── */
+const no = $("no");
+function dodge(e) {
+  if (e) e.preventDefault();
+  if (!no.classList.contains("ic-no-free")) {
+    document.body.appendChild(no);
+    no.classList.add("ic-no-free");
+  }
+  const w = no.offsetWidth, h = no.offsetHeight, p = 16;
+  no.style.left = p + Math.random() * (innerWidth  - w - 2*p) + "px";
+  no.style.top  = p + Math.random() * (innerHeight - h - 2*p) + "px";
+  tries++;
+  $("yes").style.transform = "scale(" + Math.min(1 + tries * 0.18, 2.6) + ")";
+  $("hint").textContent = HINTS[Math.min(tries, HINTS.length - 1)];
+}
+no.addEventListener("pointerenter", () => dodge());
+no.addEventListener("touchstart", dodge, { passive: false });
+no.addEventListener("click", dodge);
+
+/* ── Navigation ── */
+$("yes").onclick  = () => show("schedule");
+$("back").onclick = () => show("welcome");
+
+/* ── Form validation (day + time) ── */
+const upd = () => {
+  const ok = day && $("time").value;
+  $("confirm").disabled = !ok;
+  $("confirm").textContent = ok ? "Confirm ♡" : "Pick a day & time ♡";
+};
+document.querySelectorAll(".ic-day").forEach(b => b.onclick = () => {
+  day = b.dataset.day;
+  document.querySelectorAll(".ic-day").forEach(x => x.classList.toggle("is-active", x === b));
+  upd();
+});
+$("time").oninput = upd;
+
+/* ── SMS via Vercel serverless proxy ── */
+async function sendSMS(day, time) {
+  try {
+    const res = await fetch("/api/send-sms", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ day, time })
+    });
+    const data = await res.json();
+    return { ok: data.success };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
+/* ── Confirm button ── */
+$("confirm").onclick = async () => {
+  const timeVal   = $("time").value;
+  const formatted = new Date("2000-01-01T" + timeVal)
+                      .toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+
+  /* Show finish screen immediately */
+  $("pd").textContent = day;
+  $("pt").textContent = formatted;
+  show("finish");
+
+  /* Confetti 🎉 */
+  const pcs = ["♡","✦","🍓","✨","🌸","🍦"];
+  for (let i = 0; i < 50; i++) {
+    const c = document.createElement("div");
+    c.className = "ic-confetti";
+    c.textContent = pcs[Math.floor(Math.random() * pcs.length)];
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.fontSize = 12 + Math.random() * 18 + "px";
+    c.style.animationDuration = 2.5 + Math.random() * 3 + "s";
+    c.style.animationDelay = Math.random() * 1.5 + "s";
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 7000);
+  }
+
+  /* Send SMS notification to Israel */
+  const smsStatus = $("sms-status");
+  smsStatus.textContent = "📲 Sending Israel a heads-up…";
+
+  const message = `Hey Israel! 🍦 Ceydes said YES! She's free on ${day} at ${formatted}. It's a date! ♡`;
+  const result  = await sendSMS(day, formatted);
+
+  if (result.ok) {
+    smsStatus.textContent = "✅ Israel has been notified!";
+  } else {
+    smsStatus.textContent = "⚠️ Couldn't send SMS right now, but it's still a date!";
+    console.error("mNotify error:", result.error);
+  }
+};
+</script></body></html>
