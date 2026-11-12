@@ -1,3 +1,5 @@
+const https = require("https");
+
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -13,11 +15,7 @@ module.exports = async function handler(req, res) {
   const ISRAEL_PHONE    = process.env.ISRAEL_PHONE;
 
   if (!MNOTIFY_API_KEY || !MNOTIFY_SENDER || !ISRAEL_PHONE) {
-    console.error("Missing env vars:", {
-      hasKey: !!MNOTIFY_API_KEY,
-      hasSender: !!MNOTIFY_SENDER,
-      hasPhone: !!ISRAEL_PHONE
-    });
+    console.error("Missing env vars");
     return res.status(500).json({ success: false, error: "Missing environment variables" });
   }
 
@@ -31,22 +29,24 @@ module.exports = async function handler(req, res) {
   });
 
   const url = `https://apps.mnotify.net/smsapi?${params.toString()}`;
-  console.log("Calling mNotify, to:", ISRAEL_PHONE, "day:", day, "time:", time);
+  console.log("Calling mNotify for:", day, time);
 
-  try {
-    const response = await fetch(url);
-    const text = await response.text();
-    console.log("mNotify response:", text);
+  // Use Node's built-in https instead of fetch for compatibility
+  const body = await new Promise((resolve, reject) => {
+    https.get(url, (response) => {
+      let data = "";
+      response.on("data", chunk => { data += chunk; });
+      response.on("end", () => resolve(data));
+    }).on("error", reject);
+  });
 
-    let parsed = null;
-    try { parsed = JSON.parse(text); } catch (_) {}
+  console.log("mNotify raw response:", body);
 
-    const code    = parsed?.status ?? text.trim();
-    const success = code === "1000" || code === 1000;
+  let parsed = null;
+  try { parsed = JSON.parse(body); } catch (_) {}
 
-    return res.status(200).json({ success, code, raw: text });
-  } catch (err) {
-    console.error("Fetch error:", err.message);
-    return res.status(500).json({ success: false, error: err.message });
-  }
+  const code    = parsed?.status ?? body.trim();
+  const success = code === "1000" || code === 1000;
+
+  return res.status(200).json({ success, code, raw: body });
 };
