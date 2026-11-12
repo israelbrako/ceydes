@@ -177,7 +177,7 @@ async function sendSMS(day, time) {
       body: JSON.stringify({ day, time })
     });
     const data = await res.json();
-    return { ok: data.success, error: data.error, raw: data.raw };
+    return { ok: data.success, error: data.error, raw: data.raw, code: data.code };
   } catch (err) {
     return { ok: false, error: err.message };
   }
@@ -218,7 +218,7 @@ $("confirm").onclick = async () => {
   if (result.ok) {
     smsStatus.textContent = "✅ Israel has been notified!";
   } else {
-    smsStatus.textContent = `⚠️ SMS failed: ${result.error || result.raw || "unknown error"}`;
+    smsStatus.textContent = `⚠️ SMS failed (code: ${result.code ?? result.error ?? "unknown"})`;
     console.error("SMS error:", result);
   }
 };
